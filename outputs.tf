@@ -2,7 +2,7 @@
 
 output "app_client_id" {
   value       = azuread_application_registration.infragraph_connector.client_id
-  description = "Client ID of the Entra application used by the InfraGraph Azure connector"
+  description = "Client ID of the Entra application used by the Infragraph Azure connector"
 }
 
 output "role_scope" {

@@ -3,7 +3,7 @@
 # Requires access to edit Entra ID app registrations at tenant level.
 resource "azuread_application_registration" "infragraph_connector" {
   display_name     = var.AZURE_CONNECTOR_APP_NAME
-  description      = "InfraGraph Azure connector application registration"
+  description      = "Infragraph Azure connector application registration"
   sign_in_audience = "AzureADMyOrg"
 }
 
@@ -17,11 +17,11 @@ resource "azuread_application_redirect_uris" "infragraph_public_client" {
   ]
 }
 
-# Trust InfraGraph-issued OIDC tokens for this Entra app.
+# Trust Infragraph-issued OIDC tokens for this Entra app.
 resource "azuread_application_federated_identity_credential" "infragraph_connector" {
   application_id = azuread_application_registration.infragraph_connector.id
   display_name   = "infragraph-azure-connector"
-  description    = "infragraph azure connector"
+  description    = "Infragraph azure connector"
   audiences      = ["graph.connector.azure"]
   issuer         = "${trimsuffix(var.HCP_BASE_URL, "/")}/oidc/organization/${var.HCP_ORG_ID}"
   subject        = "project:n/a:geo:geo:service:infragraph:type:integration:name:infragraph"
@@ -39,7 +39,7 @@ resource "azurerm_role_definition" "infragraph_connector" {
 
   name        = var.AZURE_CONNECTOR_ROLE_NAME
   scope       = "/subscriptions/${each.value}"
-  description = "Read permissions for the InfraGraph Azure connector"
+  description = "Read permissions for the Infragraph Azure connector"
 
   permissions {
     actions      = local.enabled_actions

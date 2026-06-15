@@ -24,8 +24,7 @@ variable "HCP_BASE_URL" {
 }
 
 variable "AZURE_SUBSCRIPTION_IDS" {
-  type    = list(string)
-  default = []
+  type = list(string)
 
   validation {
     condition     = length(var.AZURE_SUBSCRIPTION_IDS) > 0
@@ -39,9 +38,13 @@ variable "AZURE_SUBSCRIPTION_IDS" {
 }
 
 variable "AZURE_CONNECTOR_ROLE_NAME" {
-  default = "infragraph-connector-role"
+  type        = string
+  default     = "infragraph-connector-role"
+  description = "Name of the custom Azure role definition created for the Infragraph connector."
 }
 
 variable "AZURE_CONNECTOR_APP_NAME" {
-  default = "infragraph-connector"
+  type        = string
+  default     = "infragraph-connector"
+  description = "Display name of the Entra application registration created for the Infragraph connector."
 }

@@ -4,7 +4,7 @@ This module creates the Azure Entra application registration, federated identity
 
 ## What This Module Creates
 
-- An Azure Entra application registration for the InfraGraph connector
+- An Azure Entra application registration for the Infragraph connector
 - A federated identity credential that trusts the HCP OIDC issuer and audience
 - An Azure service principal for the application registration
 - A custom role definition in each target subscription
