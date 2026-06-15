@@ -21,7 +21,7 @@ resource "azuread_application_redirect_uris" "infragraph_public_client" {
 resource "azuread_application_federated_identity_credential" "infragraph_connector" {
   application_id = azuread_application_registration.infragraph_connector.id
   display_name   = "infragraph-azure-connector"
-  description    = "Infragraph azure connector"
+  description    = "Infragraph Azure connector"
   audiences      = ["graph.connector.azure"]
   issuer         = "${trimsuffix(var.HCP_BASE_URL, "/")}/oidc/organization/${var.HCP_ORG_ID}"
   subject        = "project:n/a:geo:geo:service:infragraph:type:integration:name:infragraph"

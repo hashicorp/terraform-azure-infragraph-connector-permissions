@@ -7,7 +7,7 @@ output "app_client_id" {
 
 output "role_scope" {
   value       = local.assignable_scopes[0]
-  description = "First subscription scope where a connector role is created"
+  description = "Subscription scope derived from the first entry in AZURE_SUBSCRIPTION_IDS"
 }
 
 output "assignable_scopes" {
