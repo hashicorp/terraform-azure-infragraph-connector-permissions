@@ -41,7 +41,6 @@ locals {
     "Microsoft.Network/privateDnsZones/CNAME/read",
     "Microsoft.Network/privateDnsZones/read",
     "Microsoft.Network/privateDnsZones/virtualNetworkLinks/read",
-    "Microsoft.Network/privateEndpoints/privateLinkServiceConnections/read",
     "Microsoft.Network/privateEndpoints/read",
     "Microsoft.Network/routeTables/read",
     "Microsoft.Network/routeTables/routes/read",
