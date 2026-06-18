@@ -1,8 +1,17 @@
 # Copyright IBM Corp. 2024, 2026
 
 locals {
+  # Management_group id set to be used (only set if subscription_ids not provided)
+  management_group_assignment_ids = toset(
+    length(var.AZURE_SUBSCRIPTION_IDS) == 0 ? var.AZURE_MANAGEMENT_GROUP_IDS : []
+  )
+
   assignable_scopes = [
     for id in var.AZURE_SUBSCRIPTION_IDS : "/subscriptions/${id}"
+  ]
+  # scope for management-group
+  management_group_scopes = [
+    for id in var.AZURE_MANAGEMENT_GROUP_IDS : "/providers/Microsoft.Management/managementGroups/${id}"
   ]
 
   # Actions Required for Infragraph to fetch all supported resources
@@ -56,5 +65,11 @@ locals {
   enabled_data_actions = [
     # Microsoft.KeyVault
     "Microsoft.KeyVault/vaults/secrets/readMetadata/action",
+  ]
+  enabled_management_actions = [
+    #Microsoft.Management
+    "Microsoft.Management/managementGroups/read",
+    #Microsoft.Resource
+    "Microsoft.Resources/subscriptions/read",
   ]
 }

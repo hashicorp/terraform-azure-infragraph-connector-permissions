@@ -57,3 +57,57 @@ resource "azurerm_role_assignment" "infragraph_connector" {
   role_definition_id = azurerm_role_definition.infragraph_connector[each.value].role_definition_resource_id
   principal_id       = azuread_service_principal.infragraph_connector.object_id
 }
+
+# Custom role definition at each configured management group scope.
+# Applied only when no subscription IDs are provided.
+resource "azurerm_role_definition" "infragraph_conector_management_group" {
+  for_each = local.management_group_assignment_ids
+
+  name        = var.AZURE_MANAGEMENT_GROUP_CUSTOM_ROLE_NAME
+  scope       = "/providers/Microsoft.Management/managementGroups/${each.value}"
+  description = "Read permissions for the InfraGraph Azure connector"
+
+  permissions {
+    actions = local.enabled_management_actions
+  }
+
+  assignable_scopes = ["/providers/Microsoft.Management/managementGroups/${each.value}"]
+}
+
+# Bind custom role definition to each configured management group.
+# Applied only when no subscription IDs are provided.
+resource "azurerm_role_assignment" "infragraph_management_group_custom_role" {
+  for_each = local.management_group_assignment_ids
+
+  scope              = "/providers/Microsoft.Management/managementGroups/${each.value}"
+  role_definition_id = azurerm_role_definition.infragraph_conector_management_group[each.value].role_definition_resource_id
+  principal_id       = azuread_service_principal.infragraph_connector.object_id
+}
+
+# Create custom role for resource acess at management group scope.
+# Applied only when no subscription IDs are provided.
+resource "azurerm_role_definition" "infragraph_connector_management_group_action" {
+  for_each = local.management_group_assignment_ids
+
+  name        = var.AZURE_CONNECTOR_ROLE_NAME
+  scope       = "/providers/Microsoft.Management/managementGroups/${each.value}"
+  description = "Read permissions for the InfraGraph Azure connector"
+
+  permissions {
+    actions = local.enabled_actions
+    data_actions = local.enabled_data_actions
+  }
+
+  assignable_scopes = ["/providers/Microsoft.Management/managementGroups/${each.value}"]
+}
+
+# Bind custom role definition for resource access to each configured management group.
+# Applied only when no subscription IDs are provided.
+resource "azurerm_role_assignment" "infragraph_management_group_subscription_actions_role" {
+  for_each = local.management_group_assignment_ids
+
+  scope              = "/providers/Microsoft.Management/managementGroups/${each.value}"
+  role_definition_id = azurerm_role_definition.infragraph_connector_management_group_action[each.value].role_definition_resource_id
+  principal_id       = azuread_service_principal.infragraph_connector.object_id
+
+}

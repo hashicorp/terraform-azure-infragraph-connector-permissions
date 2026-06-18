@@ -6,11 +6,11 @@ output "app_client_id" {
 }
 
 output "role_scope" {
-  value       = local.assignable_scopes[0]
+  value       = try(local.assignable_scopes[0], local.management_group_scopes[0])
   description = "Subscription scope derived from the first entry in AZURE_SUBSCRIPTION_IDS"
 }
 
 output "assignable_scopes" {
-  value       = local.assignable_scopes
+  value       = length(local.assignable_scopes) > 0 ? local.assignable_scopes : local.management_group_scopes
   description = "Scopes where the connector role is assignable"
 }
