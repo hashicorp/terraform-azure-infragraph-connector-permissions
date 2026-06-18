@@ -65,7 +65,7 @@ Applied when `AZURE_MANAGEMENT_GROUP_IDS` is set and `AZURE_SUBSCRIPTION_IDS` is
 ## Outputs
 
 - `app_client_id`: Azure application client ID for the connector.
-- `role_scope`: First subscription scope where the connector role is created.
+- `role_scope`: First scope (subscription or management-group) where the connector role is created.
 - `assignable_scopes`: Preferred scopes where the connector role is assignable: subscription scopes when `AZURE_SUBSCRIPTION_IDS` is set, otherwise management group scopes.
 
 ## Where The Azure Permissions Live

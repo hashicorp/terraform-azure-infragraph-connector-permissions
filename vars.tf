@@ -28,7 +28,7 @@ variable "AZURE_SUBSCRIPTION_IDS" {
 
   validation {
     condition     = length(var.AZURE_SUBSCRIPTION_IDS) > 0 || length(var.AZURE_MANAGEMENT_GROUP_IDS) > 0
-    error_message = "AZURE_SUBSCRIPTION_IDS must include at least one subscription ID."
+    error_message = "AZURE_SUBSCRIPTION_IDS OR AZURE_MANAGEMENT_GROUP_IDS must include at least one subscription ID."
   }
 
   validation {

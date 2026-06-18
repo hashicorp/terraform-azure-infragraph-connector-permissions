@@ -60,7 +60,7 @@ resource "azurerm_role_assignment" "infragraph_connector" {
 
 # Custom role definition at each configured management group scope.
 # Applied only when no subscription IDs are provided.
-resource "azurerm_role_definition" "infragraph_conector_management_group" {
+resource "azurerm_role_definition" "infragraph_connector_management_group" {
   for_each = local.management_group_assignment_ids
 
   name        = var.AZURE_MANAGEMENT_GROUP_CUSTOM_ROLE_NAME
@@ -80,11 +80,11 @@ resource "azurerm_role_assignment" "infragraph_management_group_custom_role" {
   for_each = local.management_group_assignment_ids
 
   scope              = "/providers/Microsoft.Management/managementGroups/${each.value}"
-  role_definition_id = azurerm_role_definition.infragraph_conector_management_group[each.value].role_definition_resource_id
+  role_definition_id = azurerm_role_definition.infragraph_connector_management_group[each.value].role_definition_resource_id
   principal_id       = azuread_service_principal.infragraph_connector.object_id
 }
 
-# Create custom role for resource acess at management group scope.
+# Create custom role for resource access at management group scope.
 # Applied only when no subscription IDs are provided.
 resource "azurerm_role_definition" "infragraph_connector_management_group_action" {
   for_each = local.management_group_assignment_ids

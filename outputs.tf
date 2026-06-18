@@ -7,7 +7,7 @@ output "app_client_id" {
 
 output "role_scope" {
   value       = try(local.assignable_scopes[0], local.management_group_scopes[0])
-  description = "Subscription scope derived from the first entry in AZURE_SUBSCRIPTION_IDS"
+  description = "targheted role scope derived from the first entry in AZURE_SUBSCRIPTION_IDS OR AZURE_MANAGEMENT_GROUP_IDS"
 }
 
 output "assignable_scopes" {
