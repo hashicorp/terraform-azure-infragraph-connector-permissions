@@ -61,10 +61,6 @@ locals {
     "Microsoft.Web/sites/functions/read",
     "Microsoft.Web/sites/read",
   ]
-  enabled_data_actions = [
-    # Microsoft.KeyVault
-    "Microsoft.KeyVault/vaults/secrets/readMetadata/action",
-  ]
   enabled_management_actions = [
     #Microsoft.Management
     "Microsoft.Management/managementGroups/read",

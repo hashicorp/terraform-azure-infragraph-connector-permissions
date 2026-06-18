@@ -73,4 +73,4 @@ Applied when `AZURE_MANAGEMENT_GROUP_IDS` is set and `AZURE_SUBSCRIPTION_IDS` is
 
 The source of truth for the installed Azure resource permissions is `locals.tf`.
 
-If you need the exact Azure actions this module installs, open `locals.tf` and review `local.enabled_actions` and `local.enabled_data_actions`.
+If you need the exact Azure actions this module installs, open `locals.tf` and review `local.enabled_actions`.
