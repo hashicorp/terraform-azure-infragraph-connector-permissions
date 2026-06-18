@@ -30,7 +30,11 @@ Configure `azurerm` and `azuread` in the calling root module.
 
 ## Installed Azure Permissions
 
-The generated custom role includes the permission groups listed below.
+The generated custom roles include the permission groups listed below.
+
+### Subscription-scope role (`AZURE_CONNECTOR_ROLE_NAME`)
+
+Applied when `AZURE_SUBSCRIPTION_IDS` is set.
 
 | Runtime step | API family | Permissions |
 |---|---|---|
@@ -39,19 +43,31 @@ The generated custom role includes the permission groups listed below.
 | Read security and identity resources | ARM Authorization + ManagedIdentity | **Authorization:** `Microsoft.Authorization/roleAssignments/read`, `Microsoft.Authorization/roleDefinitions/read`<br>**ManagedIdentity:** `Microsoft.ManagedIdentity/userAssignedIdentities/read`, `Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials/read` |
 | Read service-level resources | ARM provider reads + data plane | **Compute:** `Microsoft.Compute/disks/read`, `Microsoft.Compute/images/read`, `Microsoft.Compute/virtualMachines/read`, `Microsoft.Compute/virtualMachines/extensions/read`, `Microsoft.ContainerService/managedClusters/read`<br>**Network:** `Microsoft.Network/networkInterfaces/read`, `Microsoft.Network/networkSecurityGroups/read`, `Microsoft.Network/networkSecurityGroups/securityRules/read`, `Microsoft.Network/privateDnsZones/read`, `Microsoft.Network/privateDnsZones/A/read`, `Microsoft.Network/privateDnsZones/CNAME/read`, `Microsoft.Network/privateDnsZones/virtualNetworkLinks/read`, `Microsoft.Network/privateEndpoints/read`, `Microsoft.Network/privateEndpoints/privateLinkServiceConnections/read`, `Microsoft.Network/routeTables/read`, `Microsoft.Network/routeTables/routes/read`, `Microsoft.Network/virtualNetworks/read`, `Microsoft.Network/virtualNetworks/subnets/read`<br>**App and data:** `Microsoft.KeyVault/vaults/read`, `Microsoft.KeyVault/vaults/secrets/readMetadata/action`, `Microsoft.RecoveryServices/vaults/backupPolicies/read`, `Microsoft.Sql/servers/databases/read`, `Microsoft.Web/sites/read`, `Microsoft.Web/sites/functions/read`, `Microsoft.Insights/diagnosticSettings/read` |
 
+### Management-group-scope roles (`AZURE_MANAGEMENT_GROUP_CUSTOM_ROLE_NAME` and `AZURE_MANAGEMENT_GROUP_RESOURCE_CUSTOM_ROLE_NAME`)
+
+Applied when `AZURE_MANAGEMENT_GROUP_IDS` is set and `AZURE_SUBSCRIPTION_IDS` is empty.
+
+| Role | API family | Permissions |
+|---|---|---|
+| Management group access (`AZURE_MANAGEMENT_GROUP_CUSTOM_ROLE_NAME`) | ARM Management | `Microsoft.Management/managementGroups/read`, `Microsoft.Resources/subscriptions/read` |
+| Resource read access (`AZURE_MANAGEMENT_GROUP_RESOURCE_CUSTOM_ROLE_NAME`) | ARM provider reads + data plane | Same full permission set as the subscription-scope role above |
+
 ## Inputs
 
 - `HCP_ORG_ID`: Required. HCP organization ID used to build the OIDC issuer and redirect URI.
-- `HCP_BASE_URL`: Required. Base URL for HCP, such as `https://api.cloud.hashicorp.com`.
-- `AZURE_SUBSCRIPTION_IDS`: Required. One or more Azure subscription IDs where the custom role and assignment are created.
-- `AZURE_CONNECTOR_ROLE_NAME`: Optional. Defaults to `infragraph-connector-role`.
-- `AZURE_CONNECTOR_APP_NAME`: Optional. Defaults to `infragraph-connector`.
+- `HCP_BASE_URL`: Required. Base URL for HCP, such as `https://api.cloud.hashicorp.com`. Must start with `https://`.
+- `AZURE_SUBSCRIPTION_IDS`: Optional. One or more Azure subscription IDs where the custom role and assignment are created. Defaults to `[]`. No duplicates allowed.
+- `AZURE_MANAGEMENT_GROUP_IDS`: Optional. One or more Azure management group IDs where the custom role and assignment are created. Defaults to `[]`. No duplicates allowed.
+- `AZURE_CONNECTOR_ROLE_NAME`: Optional. Name of the custom role created for subscription-level (and management-group resource-read) access. Defaults to `infragraph-connector-role`.
+- `AZURE_MANAGEMENT_GROUP_CUSTOM_ROLE_NAME`: Optional. Name of the custom role created for management-group-level access. Defaults to `infragraph-connector-management-role`.
+- `AZURE_MANAGEMENT_GROUP_RESOURCE_CUSTOM_ROLE_NAME`: Optional. Name of the custom role created for management-group resource-read access. Defaults to `infragraph-connector-resource-read-management-role`.
+- `AZURE_CONNECTOR_APP_NAME`: Optional. Display name of the Entra application registration. Defaults to `infragraph-connector`.
 
 ## Outputs
 
 - `app_client_id`: Azure application client ID for the connector.
-- `role_scope`: First subscription scope where the connector role is created.
-- `assignable_scopes`: Subscription scopes where the connector role is assignable.
+- `role_scope`: First scope (subscription or management-group) where the connector role is created.
+- `assignable_scopes`: Preferred scopes where the connector role is assignable: subscription scopes when `AZURE_SUBSCRIPTION_IDS` is set, otherwise management group scopes.
 
 ## Where The Azure Permissions Live
 
