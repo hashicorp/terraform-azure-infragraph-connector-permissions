@@ -26,15 +26,13 @@ variable "HCP_BASE_URL" {
 variable "AZURE_SUBSCRIPTION_IDS" {
   type = list(string)
 
-  validation {
-    condition     = length(var.AZURE_SUBSCRIPTION_IDS) > 0 || length(var.AZURE_MANAGEMENT_GROUP_IDS) > 0
-    error_message = "AZURE_SUBSCRIPTION_IDS OR AZURE_MANAGEMENT_GROUP_IDS must include at least one subscription ID."
-  }
+  default = []
 
   validation {
     condition     = length(var.AZURE_SUBSCRIPTION_IDS) == length(distinct(var.AZURE_SUBSCRIPTION_IDS))
     error_message = "AZURE_SUBSCRIPTION_IDS must not contain duplicates."
   }
+ 
 }
 
 variable "AZURE_CONNECTOR_ROLE_NAME" {
@@ -54,10 +52,6 @@ variable "AZURE_MANAGEMENT_GROUP_IDS" {
   type    = list(string)
   default = []
 
-   validation {
-    condition     = length(var.AZURE_SUBSCRIPTION_IDS) > 0 || length(var.AZURE_MANAGEMENT_GROUP_IDS) > 0
-    error_message = "Set at least one AZURE_SUBSCRIPTION_IDS or AZURE_MANAGEMENT_GROUP_IDS entry."
-  }
 
   validation {
     condition     = length(var.AZURE_MANAGEMENT_GROUP_IDS) == length(distinct(var.AZURE_MANAGEMENT_GROUP_IDS))
@@ -69,4 +63,10 @@ variable "AZURE_MANAGEMENT_GROUP_CUSTOM_ROLE_NAME" {
   type        = string
   default = "infragraph-connector-management-role"
   description = "Name of the custom Azure role definition created for the Infragraph connector."
+}
+
+variable "AZURE_MANAGEMENT_GROUP_RESOURCE_CUSTOM_ROLE_NAME" {
+  type        = string
+  default = "infragraph-connector-resource-read-management-role"
+  description = "Name of the custom Azure role definition created for the Infragraph connector to read resources."
 }

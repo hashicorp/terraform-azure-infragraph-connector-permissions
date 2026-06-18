@@ -89,7 +89,7 @@ resource "azurerm_role_assignment" "infragraph_management_group_custom_role" {
 resource "azurerm_role_definition" "infragraph_connector_management_group_action" {
   for_each = local.management_group_assignment_ids
 
-  name        = var.AZURE_CONNECTOR_ROLE_NAME
+  name        = var.AZURE_MANAGEMENT_GROUP_RESOURCE_CUSTOM_ROLE_NAME
   scope       = "/providers/Microsoft.Management/managementGroups/${each.value}"
   description = "Read permissions for the InfraGraph Azure connector"
 
