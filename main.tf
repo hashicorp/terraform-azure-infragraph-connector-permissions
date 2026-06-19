@@ -95,7 +95,6 @@ resource "azurerm_role_definition" "infragraph_connector_management_group_action
 
   permissions {
     actions = local.enabled_actions
-    data_actions = local.enabled_data_actions
   }
 
   assignable_scopes = ["/providers/Microsoft.Management/managementGroups/${each.value}"]
