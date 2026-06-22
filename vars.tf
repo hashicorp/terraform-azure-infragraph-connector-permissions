@@ -48,25 +48,22 @@ variable "AZURE_CONNECTOR_APP_NAME" {
 }
 
 
-variable "AZURE_MANAGEMENT_GROUP_IDS" {
-  type    = list(string)
-  default = []
+variable "AZURE_MANAGEMENT_GROUP_ID" {
+  type    = string
+  default = ""
 
+  description = "Management group ID to be used for the Infragraph connector."
 
-  validation {
-    condition     = length(var.AZURE_MANAGEMENT_GROUP_IDS) == length(distinct(var.AZURE_MANAGEMENT_GROUP_IDS))
-    error_message = "AZURE_MANAGEMENT_GROUP_IDS must not contain duplicates."
-  }
 }
 
 variable "AZURE_MANAGEMENT_GROUP_CUSTOM_ROLE_NAME" {
   type        = string
   default = "infragraph-connector-management-role"
-  description = "Name of the custom Azure role definition created for the Infragraph connector."
+  description = "Name of the custom Azure role definition used for Infragraph connector actions scoped to a management group."
 }
 
 variable "AZURE_MANAGEMENT_GROUP_RESOURCE_CUSTOM_ROLE_NAME" {
   type        = string
   default = "infragraph-connector-resource-read-management-role"
-  description = "Name of the custom Azure role definition created for the Infragraph connector to read resources."
+  description = "Name of the custom Azure role definition used by the Infragraph connector for management-group resource read access."
 }

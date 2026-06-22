@@ -7,8 +7,9 @@ This module creates the Azure Entra application registration, federated identity
 - An Azure Entra application registration for the Infragraph connector
 - A federated identity credential that trusts the HCP OIDC issuer and audience
 - An Azure service principal for the application registration
-- A custom role definition in each target subscription
-- A role assignment that binds the custom role to the connector principal
+- Custom role definitions in each target subscription or management group
+- Role assignments that bind the custom roles to the connector principal
+- A built-in `Key Vault Reader` role assignment at management-group scope
 
 ## Usage
 
@@ -16,10 +17,27 @@ This module creates the Azure Entra application registration, federated identity
 module "infragraph_azure_connector" {
   source = "hashicorp/infragraph-connector-permissions/azure"
 
-  HCP_ORG_ID             = "<your-hcp-org-id>"
-  HCP_BASE_URL           = "https://<your-hcp-base-url>"
-  AZURE_SUBSCRIPTION_IDS = ["<sub-id-1>", "<sub-id-2>"]
+  HCP_ORG_ID                   = "<your-hcp-org-id>"
+  HCP_BASE_URL                 = "https://<your-hcp-base-url>"
+  AZURE_SUBSCRIPTION_IDS       = ["<sub-id-1>", "<sub-id-2>"]
+  # OR (management-group scope):
+  # AZURE_MANAGEMENT_GROUP_ID = "<management-group-id>"
 }
+```
+Note: Specify either AZURE_SUBSCRIPTION_IDS or AZURE_MANAGEMENT_GROUP_ID, but not both
+
+ You can override the custom role-definition names and app registration name by setting these variables too, for example:
+
+eg:
+```
+AZURE_CONNECTOR_ROLE_NAME                        = "<your custom name for subscription-scope role>"
+     
+AZURE_MANAGEMENT_GROUP_CUSTOM_ROLE_NAME          = "<your custom name for management-group read role>"
+     
+AZURE_MANAGEMENT_GROUP_RESOURCE_CUSTOM_ROLE_NAME = "<your custom name for management-group resource-read role>"
+     
+AZURE_CONNECTOR_APP_NAME                         = "<your custom name for app registration>"
+
 ```
 
 After `terraform apply`, use the exported `app_client_id` when configuring the Azure connector in HCP Infragraph.
@@ -45,19 +63,20 @@ Applied when `AZURE_SUBSCRIPTION_IDS` is set.
 
 ### Management-group-scope roles (`AZURE_MANAGEMENT_GROUP_CUSTOM_ROLE_NAME` and `AZURE_MANAGEMENT_GROUP_RESOURCE_CUSTOM_ROLE_NAME`)
 
-Applied when `AZURE_MANAGEMENT_GROUP_IDS` is set and `AZURE_SUBSCRIPTION_IDS` is empty.
+Applied when `AZURE_MANAGEMENT_GROUP_ID` is set and `AZURE_SUBSCRIPTION_IDS` is empty.
 
 | Role | API family | Permissions |
 |---|---|---|
 | Management group access (`AZURE_MANAGEMENT_GROUP_CUSTOM_ROLE_NAME`) | ARM Management | `Microsoft.Management/managementGroups/read`, `Microsoft.Resources/subscriptions/read` |
-| Resource read access (`AZURE_MANAGEMENT_GROUP_RESOURCE_CUSTOM_ROLE_NAME`) | ARM provider reads + data plane | Same full permission set as the subscription-scope role above |
+| Resource read access (`AZURE_MANAGEMENT_GROUP_RESOURCE_CUSTOM_ROLE_NAME`) | ARM provider reads + data plane | Same full permission set as the subscription-scope role above (Except data_actions: `Microsoft.KeyVault/vaults/secrets/readMetadata/action`) |
+| Key Vault secret metadata access | Built-in role assignment | `Key Vault Reader` |
 
 ## Inputs
 
 - `HCP_ORG_ID`: Required. HCP organization ID used to build the OIDC issuer and redirect URI.
 - `HCP_BASE_URL`: Required. Base URL for HCP, such as `https://api.cloud.hashicorp.com`. Must start with `https://`.
 - `AZURE_SUBSCRIPTION_IDS`: Optional. One or more Azure subscription IDs where the custom role and assignment are created. Defaults to `[]`. No duplicates allowed.
-- `AZURE_MANAGEMENT_GROUP_IDS`: Optional. One or more Azure management group IDs where the custom role and assignment are created. Defaults to `[]`. No duplicates allowed.
+- `AZURE_MANAGEMENT_GROUP_ID`: Optional. Azure management group ID where the custom role and assignment are created. Defaults to `""`.
 - `AZURE_CONNECTOR_ROLE_NAME`: Optional. Name of the custom role created for subscription-level (and management-group resource-read) access. Defaults to `infragraph-connector-role`.
 - `AZURE_MANAGEMENT_GROUP_CUSTOM_ROLE_NAME`: Optional. Name of the custom role created for management-group-level access. Defaults to `infragraph-connector-management-role`.
 - `AZURE_MANAGEMENT_GROUP_RESOURCE_CUSTOM_ROLE_NAME`: Optional. Name of the custom role created for management-group resource-read access. Defaults to `infragraph-connector-resource-read-management-role`.

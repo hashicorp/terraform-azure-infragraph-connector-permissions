@@ -1,18 +1,20 @@
 # Copyright IBM Corp. 2024, 2026
 
 locals {
-  # Management_group id set to be used (only set if subscription_ids not provided)
-  management_group_assignment_ids = toset(
-    length(var.AZURE_SUBSCRIPTION_IDS) == 0 ? var.AZURE_MANAGEMENT_GROUP_IDS : []
-  )
+  management_group_id = trimspace(var.AZURE_MANAGEMENT_GROUP_ID)
+
+  #  Management group is considered only when no subscription IDs are provided. 
+  management_group_enabled = length(var.AZURE_SUBSCRIPTION_IDS) == 0 && local.management_group_id != ""
+  
+  management_group_scope = "/providers/Microsoft.Management/managementGroups/${local.management_group_id}"
 
   assignable_scopes = [
     for id in var.AZURE_SUBSCRIPTION_IDS : "/subscriptions/${id}"
   ]
-  # scope for management-group
-  management_group_scopes = [
-    for id in var.AZURE_MANAGEMENT_GROUP_IDS : "/providers/Microsoft.Management/managementGroups/${id}"
-  ]
+  # Scope for management group
+  management_group_scopes = local.management_group_enabled ? [
+    local.management_group_scope
+  ] : []
 
   # Actions Required for Infragraph to fetch all supported resources
   enabled_actions = [
