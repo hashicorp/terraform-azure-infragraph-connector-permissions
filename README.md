@@ -30,11 +30,13 @@ Note: Specify either AZURE_SUBSCRIPTION_IDS or AZURE_MANAGEMENT_GROUP_ID, but no
 
 eg:
 ```
-A     AZURE_CONNECTOR_ROLE_NAME                        = "<your custom name for subscription-scope role>"
-     AZURE_MANAGEMENT_GROUP_CUSTOM_ROLE_NAME          = "<your custom name for management-group read role>"
-     AZURE_MANAGEMENT_GROUP_RESOURCE_CUSTOM_ROLE_NAME = "<your custom name for management-group resource-read role>"
-     AZURE_CONNECTOR_APP_NAME                         = "<your custom name for app registration>"
-
+AZURE_CONNECTOR_ROLE_NAME                        = "<your custom name for subscription-scope role>"
+     
+AZURE_MANAGEMENT_GROUP_CUSTOM_ROLE_NAME          = "<your custom name for management-group read role>"
+     
+AZURE_MANAGEMENT_GROUP_RESOURCE_CUSTOM_ROLE_NAME = "<your custom name for management-group resource-read role>"
+     
+AZURE_CONNECTOR_APP_NAME                         = "<your custom name for app registration>"
 
 ```
 
