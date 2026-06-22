@@ -20,22 +20,20 @@ module "infragraph_azure_connector" {
   HCP_ORG_ID                   = "<your-hcp-org-id>"
   HCP_BASE_URL                 = "https://<your-hcp-base-url>"
   AZURE_SUBSCRIPTION_IDS       = ["<sub-id-1>", "<sub-id-2>"]
-  AZURE_MANAGEMENT_GROUP_ID    = "<management-id>"
+  # OR (management-group scope):
+  # AZURE_MANAGEMENT_GROUP_ID = "<management-group-id>"
 }
 ```
 Note: Specify either AZURE_SUBSCRIPTION_IDS or AZURE_MANAGEMENT_GROUP_ID, but not both
 
-You can override the custom role-defintion names and app registration name by including the role definition variable as well with the above section
+ You can override the custom role-definition names and app registration name by setting these variables too, for example:
 
 eg:
 ```
-AZURE_CONNECTOR_ROLE_NAME                        = "<your custome name for subscription scope role>
-
-AZURE_MANAGEMENT_GROUP_CUSTOM_ROLE_NAME          = "<yuour custome name for management specific read role>"
-
-AZURE_MANAGEMENT_GROUP_RESOURCE_CUSTOM_ROLE_NAME = "<yuour custome name for management group scope Resource read role>"
-
-AZURE_CONNECTOR_APP_NAME                         = "<your custome name foor app registration>"
+A     AZURE_CONNECTOR_ROLE_NAME                        = "<your custom name for subscription-scope role>"
+     AZURE_MANAGEMENT_GROUP_CUSTOM_ROLE_NAME          = "<your custom name for management-group read role>"
+     AZURE_MANAGEMENT_GROUP_RESOURCE_CUSTOM_ROLE_NAME = "<your custom name for management-group resource-read role>"
+     AZURE_CONNECTOR_APP_NAME                         = "<your custom name for app registration>"
 
 
 ```

@@ -111,7 +111,7 @@ resource "azurerm_role_assignment" "infragraph_management_group_subscription_act
 
 }
 
-# Bind Key Vault reader(built-in role) access for managementGroup
+# Bind Key Vault Reader(built-in role) access for management-group
 # Since data-action can not be assign to managementGroup
 resource "azurerm_role_assignment" "infragraph-keyvault-reader" {
   count = local.management_group_enabled ? 1 : 0

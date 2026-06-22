@@ -3,7 +3,7 @@
 locals {
   management_group_id = trimspace(var.AZURE_MANAGEMENT_GROUP_ID)
 
-  # management group get consider only if no subscription-ids provided 
+  #  Management group is considered only when no subscription IDs are provided. 
   management_group_enabled = length(var.AZURE_SUBSCRIPTION_IDS) == 0 && local.management_group_id != ""
   
   management_group_scope = "/providers/Microsoft.Management/managementGroups/${local.management_group_id}"
