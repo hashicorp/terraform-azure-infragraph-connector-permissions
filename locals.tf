@@ -1,4 +1,4 @@
-# Copyright IBM Corp. 2024, 2026
+# Copyright IBM Corp. 2026
 
 locals {
   management_group_id = trimspace(var.AZURE_MANAGEMENT_GROUP_ID)

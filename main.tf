@@ -1,4 +1,4 @@
-# Copyright IBM Corp. 2024, 2026
+# Copyright IBM Corp. 2026
 
 # Requires access to edit Entra ID app registrations at tenant level.
 resource "azuread_application_registration" "infragraph_connector" {
