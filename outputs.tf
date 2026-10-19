@@ -1,4 +1,4 @@
-# Copyright IBM Corp. 2024, 2026
+# Copyright IBM Corp. 2026
 
 output "app_client_id" {
   value       = azuread_application_registration.infragraph_connector.client_id

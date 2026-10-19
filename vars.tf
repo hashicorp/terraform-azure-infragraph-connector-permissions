@@ -1,4 +1,4 @@
-# Copyright IBM Corp. 2024, 2026
+# Copyright IBM Corp. 2026
 
 variable "HCP_ORG_ID" {
   type = string
